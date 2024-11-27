@@ -6,6 +6,9 @@ import { SwaggerConfiguration } from './config/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const document = SwaggerModule.createDocument(app, SwaggerConfiguration);
+  app.setGlobalPrefix('/api');
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true
@@ -16,8 +19,7 @@ async function bootstrap() {
     origin: process.env.ORIGIN
   });
 
-  const document = SwaggerModule.createDocument(app, SwaggerConfiguration);
-  SwaggerModule.setup('/api', app, document);
+  SwaggerModule.setup('/api/swagger', app, document);
 
   await app.listen(process.env.PORT);
 }
